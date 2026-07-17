@@ -181,6 +181,4 @@ def add_complex_lead(name, phone_number, username):
     lead_id = response['_embedded']['unsorted'][0]['_embedded']['leads'][0]['id']
     return lead_id
 
-amocrmwrapper = AmoCRMWrapper()
 
-amocrmwrapper.init_oauth2()
