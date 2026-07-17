@@ -39,8 +39,8 @@ def _is_expire(token):
 
 def save_tokens(access_token, refresh_token):
     try:
-        create_access_token(access_token)
-        create_refresh_token(refresh_token)
+        update_access_token_bd(access_token)
+        update_refresh_token_bd(refresh_token)
         return True
     except Exception as e:
         return e
