@@ -23,7 +23,7 @@ RESPONSIBLE_USER_ID = 33083426
 
 
 
-secret_code = 'def502009bf47712257ec69a809758f420c713ff8052c18b6f3ae79497dc89404e442f0e0f90f785584ed52215a00f3eb1336d0b02757fecf209bd3a550b6d89ecbb01b163050ec9e1146a230db7878f6d79d0852b68f981f728fb2bb74443dca44f9988cae0cd9171d9da9cf454717fb20ed87501ff786deb9e1adf323ce1170d80d6471ee1de391cd584895821dc507064da41c46eeeeafe687fc3917d8b2ed65bb59941f257e2b3ce58cb8e6b8d6d6320b94077b09419e58687e3004a7e2c49ad29976281acf47690ebc30e7e3757de61981a8668549db6ce077db7e5b50bc840f7a6af669fabc301e968332433ab6a4ec5e769a07f9e5b0e964ded87c6cb2fef7c2d04ddb696fa6f86048ee8bc12733430f967d76b058ebf047dd69346a4116ca1cee472e6836b3c909204d163d8d92c8e21932a3a8a2c99c089339b61830352c2b5c27ff7dc2a04ae4cc62588726e5d31dd407838d34c3e6e201f0f6179a422f55b71fb0aa3af28e1fe411d9a55149bdeffd4a14fd356288b769aa5059bc41f0d2d1a9d19218d93f05384cf9a4efb800e6dee4f7df1d06f5ad2d2431cf1411e335cd6088249c476f4e778a7330214b453d12b8dfb2973f7306d91b1b16d6eca73615309c8c47291b121db644c5ff4a5cac9e0b466304ec9bfcf209ff8ac4a23351e'
+secret_code = 'def502001b6b8bae5c3345cad44955ce091ebcf38317e90b928d79d0e30c97da3b60d9cc8622baf5e43775ca9c2190464e1824c67d040bc9f974bd95422ae5e6dfda25229a8b1719abd92096c851a2c059bffe21ad01845022d6f7c4dc92ddc2a970a7b179d222f977a9bae1154df44df950088f5baae866a19f57c6d1a5a0ca680b58218848b044f933236615e1834ce5e2378c22494274457259f2fcc384aeefb16dc1684a4fbbc25b3705500d8ae7fb5a3788fd8c3edbb4112bcc717b5e9f656f6f57012e39b99970a7444a5ea69e860f36bd9b044f3616799e15bd461a4e40eda9e47b95d5054ac16f8f731ed54c89c69c8dfd514fea1ae4e4f4650eb5f6f3f73026e1dbe774c99303939b7bb84c0f515c15ccfd3e4f9780d459d394cad089e4d33a76416964e5aad0f596e1fe1cea7e0142169fc4f02290c800177a0d93de37df5a1bb56361194e032c1b47d9142d3cf17b7bcf23ae40dfbc834dac322b9bd5bb89f9f3f5230a337c2ef84e018d43dc6c747c5060c89808592d85fbea455d9d8bf9818d15a0a93adda2855ce94156dc2e88eb86492a4b19a4386bc7bb099565d8cfa0650bb4b0283788b49932c4b50e27c38cf6f4a48bc0bd04d7ef096af2bf070598bd5316fad3ace066188c43a4b497f3d34e5d5c1184a7c6bf8a862515fcd45d'
 
 
 
@@ -39,8 +39,8 @@ def _is_expire(token):
 
 def save_tokens(access_token, refresh_token):
     try:
-        update_access_token_bd(access_token)
-        update_refresh_token_bd(refresh_token)
+        create_access_token(access_token)
+        create_refresh_token(refresh_token)
         return True
     except Exception as e:
         return e
@@ -144,7 +144,6 @@ def add_complex_lead(name, phone_number, username):
             "_embedded": {
                 "leads": [{
 
-                    "name": 'Новая сделка с бота',
                 }
 
                           ],
@@ -182,4 +181,6 @@ def add_complex_lead(name, phone_number, username):
     lead_id = response['_embedded']['unsorted'][0]['_embedded']['leads'][0]['id']
     return lead_id
 
+amocrmwrapper = AmoCRMWrapper()
 
+amocrmwrapper.init_oauth2()
