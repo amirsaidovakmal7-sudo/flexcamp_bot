@@ -1,17 +1,16 @@
 import telebot
 import time
-import buttons
-from amocrm.v2 import tokens, Lead
-from config import TOKEN
 
-tokens.default_token_manager(
-    client_id="xxx-xxx-xxxx-xxxx-xxxxxxx",
-    client_secret="xxxx",
-    subdomain="subdomain",
-    redirect_url="https://xxxx/xx",
-    storage=tokens.FileTokensStorage(),  # by default FileTokensStorage
-)
-tokens.default_token_manager.init(code="..very long code...", skip_error=True)
+from telebot.types import ReplyKeyboardRemove
+
+import buttons
+
+from config import TOKEN
+from init_amo import add_complex_lead
+from database import Base, engine
+from init_amo import add_complex_lead
+
+Base.metadata.create_all(engine)
 
 group_id = -1003960414454
 
@@ -41,24 +40,40 @@ def send_welcome(message):
 
 
 
+
 def get_phone_number(message):
     user_id = message.from_user.id
     if message.contact:
         user_phone = message.contact.phone_number
+        bot.send_chat_action(user_id, 'typing')
+        time.sleep(2)
+        bot.send_message(user_id, 'Спасибо! Пожалуйста, напишите ваше имя что бы знать как к вам обращаться',
+                         reply_markup=ReplyKeyboardRemove())
+        bot.register_next_step_handler(message, get_name, user_phone)
+
+    else:
+        bot.send_message(user_id, 'Отправьте номер через кнопку!')
+        bot.register_next_step_handler(message, get_phone_number)
+
+
+def get_name(message, user_phone):
+    user_id = message.from_user.id
+    if message:
+        user_name = message.text
         user_username = message.from_user.username
         bot.send_chat_action(user_id, 'typing')
         time.sleep(2)
         bot.send_message(user_id, 'Спасибо! Наш специалист свяжется с вами в ближайшее время',
                          reply_markup=telebot.types.ReplyKeyboardRemove())
         text = (f'Новый клиент! (заявка из телеграм бота) \n\n'
+                f'Имя клиента: {user_name}\n'
                 f'Номер телефона: {user_phone} \n'
                 f'Телеграм юзер: @{user_username} \n')
-
         bot.send_message(group_id, text)
-        #Lead.objects.create(name=user_username, phone=user_phone)
+        add_complex_lead(user_name, user_phone, user_username)
     else:
-        bot.send_message(user_id, 'Отправьте номер через кнопку!')
-        bot.register_next_step_handler(message, get_phone_number)
+        bot.send_message(user_id, 'Имя введено неверно!')
+        bot.register_next_step_handler(message, get_name, user_phone)
 
 
 bot.polling(non_stop=True)
