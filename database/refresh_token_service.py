@@ -17,7 +17,7 @@ def create_refresh_token(refresh_token):
 def update_refresh_token_bd(refresh_token):
     db = next(get_db())
     bd_refresh_token = db.query(Refresh_token).filter(Refresh_token.id == 1).first()
-    if not bd_refresh_token:
+    if bd_refresh_token:
         bd_refresh_token.refresh_token = refresh_token
         db.commit()
         return True

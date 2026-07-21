@@ -17,7 +17,7 @@ def create_access_token(access_token):
 def update_access_token_bd(access_token):
     db = next(get_db())
     bd_access_token = db.query(Access_token).filter(Access_token.id == 1).first()
-    if not bd_access_token:
+    if bd_access_token:
         bd_access_token.access_token = access_token
         db.commit()
         return True
